@@ -1,0 +1,47 @@
+import jieba
+
+# 定义停用词
+punctuation = ["，","。", "：", "；", "？"]
+
+# 定义语料
+content = ["机器学习带动人工智能飞速的发展。",
+           "深度学习带动人工智能飞速的发展。",
+           "机器学习和深度学习带动人工智能飞速的发展。"]
+
+# 分词
+segs_1 = [jieba.lcut(con) for con in content]
+print(segs_1)
+
+# 去停用词
+tokenized = []
+for sentence in segs_1:
+    words = []
+    for word in sentence:
+        if word not in punctuation:
+            words.append(word)
+    tokenized.append(words)
+print(tokenized)
+
+# 求并集
+bag_of_words = [x for item in segs_1 for x in item if x not in punctuation]
+# 去重
+bag_of_words = list(set(bag_of_words))
+print(bag_of_words)
+
+# 以上面特征词的顺序，完成词袋化
+bag_of_word2vec = []
+for sentence in tokenized:
+    tokens = [1 if token in sentence else 0 for token in bag_of_words]
+    bag_of_word2vec.append(tokens)
+
+from gensim import corpora
+import gensim
+# tokenized是去标点之后的
+dictionary = corpora.Dictionary(tokenized)
+# 保存词典
+dictionary.save('deerwester.dict')
+print(dictionary)
+print(dictionary.token2id)
+
+corpus = [dictionary.doc2bow(sentence) for sentence in segs_1]
+print(corpus)
