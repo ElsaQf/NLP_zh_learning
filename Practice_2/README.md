@@ -8,3 +8,4 @@
 2. MultimonalNB / SVM(kernel='linear')
 3. StratifiedKFold
 4. CNN / LSTM
+5. 主题提取（关键词k1,k2, ... -> 命中 -> “食品安全”词库）
